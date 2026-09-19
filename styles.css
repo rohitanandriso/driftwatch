@@ -18,7 +18,7 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; scroll-padding-top: 92px; }\nsection[id] { scroll-margin-top: 92px; }
 body {
   margin: 0;
   color: var(--text);
@@ -108,7 +108,7 @@ h1 {
   margin: 0 0 28px; max-width: 760px;
 }
 h2 {
-  font-size: clamp(34px, 5vw, 56px); line-height: 1.05; letter-spacing: -.04em;
+  font-size: clamp(32px, 4.4vw, 52px); line-height: 1.06; letter-spacing: -.04em;
   margin: 0 0 22px;
 }
 h3 { margin: 0 0 12px; letter-spacing: -.02em; }
@@ -177,7 +177,7 @@ h3 { margin: 0 0 12px; letter-spacing: -.02em; }
   border: 1px solid var(--line); padding: 8px 10px; border-radius: 8px; color: #c9d8e6;
 }
 
-.section { padding: 100px 0; }
+.section { padding: 84px 0; }
 .section-dark { background: rgba(255,255,255,.018); border-block: 1px solid var(--line); }
 .section-intro { max-width: 790px; font-size: 17px; margin-bottom: 36px; }
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: start; }
@@ -234,7 +234,7 @@ h3 { margin: 0 0 12px; letter-spacing: -.02em; }
 .arch-node strong, .arch-node small { display: block; }
 .arch-node small { color: var(--muted); margin-top: 9px; line-height: 1.45; }
 .node-num { display: block; color: var(--cyan); font: 600 11px "JetBrains Mono"; margin-bottom: 18px; }
-.arch-arrow { color: #50718d; }
+.arch-arrow { color: #69a6c7; font-weight: 700; }
 .arch-support { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
 .support-card {
   border: 1px solid var(--line); border-radius: 14px; padding: 18px; background: rgba(255,255,255,.018);
@@ -310,12 +310,12 @@ h3 { margin: 0 0 12px; letter-spacing: -.02em; }
 
 .integration-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-top: 42px; }
 .integration-grid article {
-  display: grid; grid-template-columns: 54px 1fr; gap: 18px; padding: 22px;
+  display: grid; grid-template-columns: 54px 1fr; gap: 16px; padding: 20px;
   border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,.02);
 }
 .integration-grid article > span {
-  width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center;
-  background: rgba(77,232,255,.06); border: 1px solid rgba(77,232,255,.18); color: var(--cyan);
+  width: 50px; height: 50px; border-radius: 12px; display: grid; place-items: center;
+  background: linear-gradient(180deg, rgba(77,232,255,.10), rgba(77,232,255,.04)); border: 1px solid rgba(77,232,255,.28); color: var(--cyan);
   font: 600 11px "JetBrains Mono";
 }
 .integration-grid h3 { margin-top: 2px; }
