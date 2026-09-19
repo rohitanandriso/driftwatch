@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Driftwatch — a stateful security firewall for AI conversations and agent tool activity." />
+  <title>Driftwatch — The Firewall That Remembers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grid-bg"></div>
+
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#top" aria-label="Driftwatch home">
+        <span class="brand-mark">DW</span>
+        <span>Driftwatch</span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#problem">Problem</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#detectors">Detectors</a>
+        <a href="#results">Results</a>
+        <a href="#roadmap">Roadmap</a>
+      </nav>
+
+      <a class="button button-sm button-ghost" href="https://github.com/" target="_blank" rel="noreferrer">
+        GitHub
+      </a>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">Microsoft Hackathon · Hack SFI with AI</div>
+          <h1>
+            The firewall that
+            <span class="gradient-text">remembers.</span>
+          </h1>
+          <p class="hero-lead">
+            Driftwatch is a stateful security layer for AI conversations and agent tool activity.
+            Instead of asking whether <em>this prompt</em> is malicious, it asks whether the
+            <em>entire session</em> is becoming malicious.
+          </p>
+
+          <div class="hero-actions">
+            <a class="button button-primary" href="#architecture">Explore architecture</a>
+            <a class="button button-ghost" href="#demo">See the demo flow</a>
+          </div>
+
+          <div class="hero-meta">
+            <span>Session-level detection</span>
+            <span>MCP boundary interception</span>
+            <span>Agent quarantine</span>
+            <span>TLS termination</span>
+          </div>
+        </div>
+
+        <div class="hero-panel" aria-label="Driftwatch live verdict example">
+          <div class="terminal-head">
+            <div class="terminal-dots"><span></span><span></span><span></span></div>
+            <span class="mono">driftwatch.inspect</span>
+          </div>
+          <div class="terminal-body mono">
+            <div class="term-row"><span>turn_01</span><span class="allow">ALLOW</span></div>
+            <div class="term-row"><span>turn_02</span><span class="allow">ALLOW</span></div>
+            <div class="term-row"><span>turn_03</span><span class="flag">FLAG</span></div>
+            <div class="term-row"><span>turn_04</span><span class="block">BLOCK</span></div>
+            <div class="term-row"><span>turn_05</span><span class="kill">TERMINATE</span></div>
+            <div class="trace">
+              <span class="trace-label">signals</span>
+              <code>intent_drift + secret_probe + tool_chain</code>
+            </div>
+            <div class="trace">
+              <span class="trace-label">action</span>
+              <code>agent quarantined across model + tool boundaries</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="logos-strip">
+      <div class="container strip-content">
+        <span>Built for AI security at the session boundary</span>
+        <div class="strip-tags">
+          <span>Azure OpenAI</span>
+          <span>Microsoft Sentinel</span>
+          <span>Entra Agent ID</span>
+          <span>Microsoft Purview</span>
+          <span>MCP</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="container split">
+        <div>
+          <div class="section-kicker">The problem</div>
+          <h2>Attacks can be safe one message at a time — and dangerous as a session.</h2>
+        </div>
+        <div class="body-copy">
+          <p>
+            Per-message controls are strong at obvious single-turn attacks. But gradual jailbreaks,
+            incremental data leakage, repeated secret probing, and risky tool sequences can emerge
+            only when the full session is considered.
+          </p>
+          <p>
+            Driftwatch changes the unit of analysis from the message to the session and continuously
+            re-evaluates the accumulated state.
+          </p>
+        </div>
+      </div>
+
+      <div class="container compare-grid">
+        <article class="compare-card muted-card">
+          <div class="card-label">Per-message view</div>
+          <h3>Each turn looks acceptable.</h3>
+          <div class="turn-list mono">
+            <span>Turn 1 <b class="allow">ALLOW</b></span>
+            <span>Turn 2 <b class="allow">ALLOW</b></span>
+            <span>Turn 3 <b class="allow">ALLOW</b></span>
+            <span>Turn 4 <b class="allow">ALLOW</b></span>
+            <span>Turn 5 <b class="allow">ALLOW</b></span>
+          </div>
+        </article>
+
+        <article class="compare-card accent-card">
+          <div class="card-label">Driftwatch view</div>
+          <h3>The trajectory reveals the attack.</h3>
+          <div class="turn-list mono">
+            <span>Turn 1 <b class="allow">ALLOW</b></span>
+            <span>Turn 2 <b class="allow">ALLOW</b></span>
+            <span>Turn 3 <b class="flag">FLAG</b></span>
+            <span>Turn 4 <b class="block">BLOCK</b></span>
+            <span>Turn 5 <b class="kill">TERMINATE</b></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="architecture">
+      <div class="container">
+        <div class="section-kicker">Architecture</div>
+        <h2>One stateful control plane across prompts, responses, and tools.</h2>
+        <p class="section-intro">
+          Driftwatch is designed to sit at the trust boundary, inspect both directions, maintain
+          session state, and enforce the highest resulting verdict.
+        </p>
+
+        <div class="architecture">
+          <div class="arch-node">
+            <span class="node-num">01</span>
+            <strong>User / App</strong>
+            <small>Prompt enters over TLS</small>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node featured">
+            <span class="node-num">02</span>
+            <strong>Driftwatch</strong>
+            <small>State + detectors + policy</small>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="node-num">03</span>
+            <strong>Agent / Model</strong>
+            <small>Azure OpenAI target</small>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="node-num">04</span>
+            <strong>MCP Gateway</strong>
+            <small>Tool call interception</small>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="node-num">05</span>
+            <strong>MCP Tools</strong>
+            <small>Data + external sinks</small>
+          </div>
+        </div>
+
+        <div class="verdicts mono">
+          <span class="v allow-v">ALLOW</span>
+          <span>→</span>
+          <span class="v flag-v">FLAG</span>
+          <span>→</span>
+          <span class="v redact-v">REDACT</span>
+          <span>→</span>
+          <span class="v block-v">BLOCK</span>
+          <span>→</span>
+          <span class="v kill-v">TERMINATE</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="detectors">
+      <div class="container">
+        <div class="section-kicker">Session-level detectors</div>
+        <h2>Signals that only become visible when the firewall remembers.</h2>
+
+        <div class="cards-5">
+          <article class="feature-card">
+            <div class="feature-icon">↝</div>
+            <h3>Intent Drift</h3>
+            <p>Tracks the conversation trajectory across turns to surface gradual escalation patterns.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">⌕</div>
+            <h3>Secret Probing</h3>
+            <p>Accumulates repeated attempts to obtain credentials, keys, passwords, and sensitive secrets.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">∑</div>
+            <h3>Exfiltration Budget</h3>
+            <p>Counts cumulative sensitive-record release across the session instead of per response.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">⛓</div>
+            <h3>Tool Chain</h3>
+            <p>Correlates individually authorized calls into risky sequences such as sensitive read → external sink.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">↻</div>
+            <h3>Refusal Probing</h3>
+            <p>Detects persistent refuse → rephrase → retry loops commonly seen in automated multi-turn attacks.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark" id="results">
+      <div class="container">
+        <div class="section-kicker">Evaluation</div>
+        <h2>Measured on the current Driftwatch evaluation corpus.</h2>
+        <p class="section-intro">
+          These results come from the included evaluation harness and should be read as hackathon
+          prototype results, not independent production benchmarks.
+        </p>
+
+        <div class="metric-grid">
+          <div class="metric">
+            <strong>94.4%</strong>
+            <span>Multi-turn attacks detected</span>
+          </div>
+          <div class="metric">
+            <strong>100%</strong>
+            <span>Single-turn attacks detected</span>
+          </div>
+          <div class="metric">
+            <strong>0.0%</strong>
+            <span>Benign false positives</span>
+          </div>
+          <div class="metric">
+            <strong>~1.3 ms</strong>
+            <span>Mean inspection latency</span>
+          </div>
+          <div class="metric">
+            <strong>69.5%</strong>
+            <span>Data-loss reduction</span>
+          </div>
+        </div>
+
+        <div class="baseline-box">
+          <div>
+            <span class="baseline-title">Multi-turn attack detection</span>
+            <strong>Driftwatch 94.4%</strong>
+          </div>
+          <div>
+            <span class="baseline-title">Per-message baseline</span>
+            <strong>0.0%</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="demo">
+      <div class="container">
+        <div class="section-kicker">Demo story</div>
+        <h2>From subtle drift to containment.</h2>
+
+        <div class="timeline">
+          <div class="timeline-item">
+            <span>01</span>
+            <div><h3>Benign opening</h3><p>The first request looks harmless and passes normal per-turn checks.</p></div>
+          </div>
+          <div class="timeline-item">
+            <span>02</span>
+            <div><h3>Gradual escalation</h3><p>Small semantic steps move the conversation toward sensitive intent.</p></div>
+          </div>
+          <div class="timeline-item">
+            <span>03</span>
+            <div><h3>Cross-signal correlation</h3><p>Intent drift combines with secret probing, exfiltration, or risky tool activity.</p></div>
+          </div>
+          <div class="timeline-item">
+            <span>04</span>
+            <div><h3>Block and terminate</h3><p>The current turn is blocked and the session can be terminated.</p></div>
+          </div>
+          <div class="timeline-item">
+            <span>05</span>
+            <div><h3>Quarantine</h3><p>The agent identity is contained across subsequent model and tool boundaries until human release.</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-dark">
+      <div class="container split">
+        <div>
+          <div class="section-kicker">Microsoft-native story</div>
+          <h2>Designed to complement the security controls you already have.</h2>
+        </div>
+        <div class="integration-list">
+          <div><b>Prompt Shields</b><span>Per-input attack detection</span></div>
+          <div><b>Microsoft Purview</b><span>Sensitive data classification signals</span></div>
+          <div><b>Entra Agent ID</b><span>Durable agent identity for session state and quarantine</span></div>
+          <div><b>Microsoft Sentinel</b><span>Centralized detection and investigation via telemetry</span></div>
+          <div><b>MCP</b><span>Tool-boundary inspection and side-effect control</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="roadmap">
+      <div class="container">
+        <div class="section-kicker">Production path</div>
+        <h2>What comes next.</h2>
+        <div class="roadmap-grid">
+          <article><span>01</span><h3>Real Azure OpenAI target</h3><p>Wire the existing real-model seam to a live Azure OpenAI deployment.</p></article>
+          <article><span>02</span><h3>Prompt Shields adapter</h3><p>Replace the local baseline with the live Azure AI Content Safety endpoint.</p></article>
+          <article><span>03</span><h3>Shared state store</h3><p>Move session and quarantine state to a distributed store such as Redis.</p></article>
+          <article><span>04</span><h3>Cross-agent trust</h3><p>Propagate security context across agent-to-agent handoffs.</p></article>
+          <article><span>05</span><h3>Governance labels</h3><p>Derive integrity and confidentiality context from Purview and identity signals.</p></article>
+          <article><span>06</span><h3>Full MCP compliance</h3><p>Expand the gateway for production-grade JSON-RPC / SSE interoperability.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-section">
+      <div class="container cta-box">
+        <div>
+          <div class="section-kicker">Driftwatch</div>
+          <h2>Secure the session, not just the prompt.</h2>
+          <p>A stateful firewall for AI conversations and agents.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="button button-primary" href="https://github.com/" target="_blank" rel="noreferrer">View on GitHub</a>
+          <a class="button button-ghost" href="#top">Back to top</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-wrap">
+      <div>Driftwatch · Microsoft Hackathon — Hack SFI with AI</div>
+      <div class="mono">stateful AI security</div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
