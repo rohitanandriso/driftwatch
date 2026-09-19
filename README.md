@@ -1,37 +1,67 @@
-# Driftwatch Landing Page
+# Driftwatch
 
-Static, dependency-free GitHub Pages landing page for the Driftwatch Microsoft Hackathon project.
+**The firewall that remembers.**
 
-## Files
+Driftwatch is a stateful security layer for AI conversations and agent tool activity. Rather than evaluating only the current prompt, Driftwatch retains session state and correlates signals across turns and tool activity.
 
-- `index.html` — page content
-- `styles.css` — responsive styling
-- `script.js` — lightweight reveal animation
+## Microsoft Hackathon
 
-## Publish with GitHub Pages
+Built for **Microsoft Hackathon — Hack SFI with AI**.
 
-1. Create or open your Driftwatch GitHub repository.
-2. Copy `index.html`, `styles.css`, and `script.js` into the repository root.
-3. Commit and push.
-4. In GitHub, open **Settings → Pages**.
-5. Under **Build and deployment**, choose **Deploy from a branch**.
-6. Select your default branch (usually `main`) and `/ (root)`.
-7. Save. GitHub will provide the public Pages URL.
+## What Driftwatch demonstrates
 
-## Before publishing
+- Session-level detection for gradual multi-turn attacks
+- Intent drift, secret probing, exfiltration budget, tool-chain, and refusal-probing detectors
+- MCP tool-boundary interception
+- Agent kill switch and quarantine
+- TLS-terminating gateway pattern
+- OpenTelemetry-shaped security telemetry
+- Evaluation harness comparing stateful inspection with a per-message baseline
 
-Search `index.html` for:
+## Live site
 
-```text
-https://github.com/
-```
+**https://rohitanandriso.github.io/driftwatch/**
 
-Replace both occurrences with the actual Driftwatch repository URL.
+## Repository
 
-## Optional additions
+**https://github.com/rohitanandriso/driftwatch**
 
-- Add an architecture image under `assets/`
-- Add a short demo GIF/video
-- Add links to project documentation and source code
-- Add Microsoft Hackathon submission / demo links if appropriate
-- Add Open Graph metadata and a social preview image
+## Current evaluation results
+
+These results come from the current Driftwatch evaluation corpus and harness and should be treated as prototype results, not independent production benchmarks.
+
+| Metric | Driftwatch |
+| --- | ---: |
+| Multi-turn attacks detected | 94.4% |
+| Single-turn attacks detected | 100% |
+| Benign false positives in current corpus | 0.0% |
+| Mean inspection latency | ~1.3 ms |
+| Data-loss reduction on theft attacks | 69.5% |
+
+## Microsoft-native integration path
+
+Driftwatch is positioned as a complementary security layer that can integrate with:
+
+- **Azure OpenAI** for the production model target
+- **Prompt Shields** for per-input attack detection
+- **Microsoft Purview** for sensitive-data context
+- **Entra Agent ID** for durable non-human identity and quarantine
+- **Microsoft Sentinel** for security telemetry and investigation
+- **MCP** for tool-boundary inspection
+
+## Production roadmap
+
+- Wire a real Azure OpenAI target
+- Replace the local baseline with live Prompt Shields
+- Move session and quarantine state to a shared store such as Redis
+- Add cross-agent trust propagation
+- Derive governance context from Purview and identity signals
+- Expand MCP interoperability
+
+## Landing page files
+
+- `index.html`
+- `styles.css`
+- `script.js`
+
+GitHub Pages publishes directly from the repository root.
