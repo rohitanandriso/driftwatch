@@ -30,6 +30,7 @@
         <a href="#why">Why Driftwatch</a>
         <a href="#architecture">Architecture</a>
         <a href="#detectors">Detectors</a>
+        <a href="#browser-guard">Browser Guard</a>
         <a href="#results">Results</a>
         <a href="#demo">Demo</a>
       </nav>
@@ -51,9 +52,10 @@
           </div>
           <h1>The firewall that <span class="gradient-text">remembers.</span></h1>
           <p class="hero-lead">
-            Driftwatch is a stateful security layer for AI conversations and agent tool activity.
-            Instead of asking whether <em>this prompt</em> is malicious, it asks whether the
-            <em>entire session</em> is becoming malicious.
+            Driftwatch is a stateful security layer for AI conversations, agent tool activity,
+            and data leaving managed browsers for public AI services. Instead of asking whether
+            <em>this prompt</em> is malicious, it asks whether the <em>entire session</em> is becoming malicious
+            — and whether sensitive enterprise data should be allowed to leave at all.
           </p>
 
           <div class="hero-actions">
@@ -67,6 +69,8 @@
             <span>MCP tool-boundary interception</span>
             <span>Kill switch</span>
             <span>Agent quarantine</span>
+            <span>Browser Guard</span>
+            <span>Multilingual detection</span>
             <span>TLS termination</span>
           </div>
         </div>
@@ -198,7 +202,8 @@
         <div class="section-kicker">Architecture</div>
         <h2>A stateful control plane at the AI trust boundary.</h2>
         <p class="section-intro">
-          The same inspection engine can sit in front of model traffic or at the MCP tool boundary.
+          The same inspection engine can sit in front of model traffic, at the MCP tool boundary,
+          or behind a managed-browser extension that inspects AI data egress before submission.
           Every event updates session state; detectors re-evaluate; the highest correlated verdict is enforced.
         </p>
 
@@ -303,6 +308,74 @@
       </div>
     </section>
 
+
+    <section class="section" id="browser-guard">
+      <div class="container">
+        <div class="section-kicker">Browser Guard · Working prototype</div>
+        <h2>Stop enterprise secrets before they reach personal AI accounts.</h2>
+        <p class="section-intro">
+          Employees can sign in to public AI tools with personal accounts and subscriptions, outside the enterprise identity boundary.
+          Driftwatch Browser Guard moves enforcement to the managed browser: it inspects pasted content before submission,
+          correlates it with session context, and can warn or block when sensitive enterprise data is about to leave.
+        </p>
+
+        <div class="browser-grid">
+          <article class="browser-card accent-card">
+            <span class="browser-status mono">01 · BEFORE SEND</span>
+            <h3>AI data-egress protection</h3>
+            <p>Inspect prompts and pasted content before they reach ChatGPT or Claude, even when the user is signed in with a personal account.</p>
+            <div class="browser-flow mono">
+              <span>copy secret</span><b>→</b><span>Driftwatch</span><b>→</b><span class="kill">BLOCK</span>
+            </div>
+          </article>
+          <article class="browser-card">
+            <span class="browser-status mono">02 · LOCAL FIRST</span>
+            <h3>Secret-aware inspection</h3>
+            <p>Detect high-confidence credentials and secret patterns locally, including private keys, tokens, connection strings, passwords, and API keys.</p>
+            <div class="browser-pills">
+              <span>JWT</span><span>API keys</span><span>Passwords</span><span>Connection strings</span><span>Private keys</span>
+            </div>
+          </article>
+          <article class="browser-card">
+            <span class="browser-status mono">03 · ENTERPRISE READY</span>
+            <h3>Policy at the browser boundary</h3>
+            <p>Prototype today: paste interception and local session scoring. Production path: file-upload inspection, typed-submit interception, managed policy, and security telemetry.</p>
+            <div class="browser-pills">
+              <span>Edge / Chrome</span><span>ChatGPT</span><span>Claude</span><span>Sentinel-ready</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="browser-demo-panel">
+          <div>
+            <span class="card-label">Example · personal AI destination</span>
+            <h3>DB_PASSWORD=DemoSecret123!</h3>
+            <p>Driftwatch intercepts the paste in the managed browser, classifies the content as a credential, and blocks it before the text reaches the public AI service.</p>
+          </div>
+          <div class="browser-verdict mono">
+            <span>destination</span><b>chatgpt.com</b>
+            <span>classification</span><b>credential</b>
+            <span>session risk</span><b class="kill">CRITICAL</b>
+            <span>action</span><b class="kill">BLOCK</b>
+          </div>
+        </div>
+
+        <div class="language-panel">
+          <div>
+            <span class="card-label">Multilingual security demonstrations</span>
+            <h3>Security behavior should not depend on English-only prompts.</h3>
+            <p>Chat Firewall and compromised-MCP demo scenarios now include multilingual coverage. Language changes the content; the trust-boundary policy stays the same.</p>
+          </div>
+          <div class="language-chips">
+            <span>English</span><span>Français</span><span>Deutsch</span><span>Русский</span><span>हिन्दी</span><span>中文</span>
+          </div>
+        </div>
+        <p class="architecture-note">
+          Multilingual scenarios are prototype demo validation and are not included in the original 94.4% evaluation benchmark.
+        </p>
+      </div>
+    </section>
+
     <section class="section" id="results">
       <div class="container">
         <div class="section-kicker">Evaluation</div>
@@ -342,9 +415,15 @@
 
     <section class="section section-dark" id="demo">
       <div class="container">
-        <div class="section-kicker">Demo story</div>
-        <h2>From subtle drift to agent containment.</h2>
-        <p class="section-intro">The live demo is designed to make the difference between message-level and session-level inspection visible in a few minutes.</p>
+        <div class="section-kicker">Live demonstration</div>
+        <h2>Three security surfaces. One stateful engine.</h2>
+        <p class="section-intro">The demo moves from conversation-level drift, to compromised MCP tools, to browser data-egress protection — all using the same security principle: remember context and enforce at the trust boundary.</p>
+
+        <div class="demo-surfaces">
+          <article><span class="mono">01</span><h3>Chat Firewall</h3><p>Run benign-to-malicious multi-turn conversations and watch session signals move from ALLOW to FLAG, BLOCK, and TERMINATE.</p></article>
+          <article><span class="mono">02</span><h3>MCP Tool Boundary</h3><p>Use a compromised MCP server, trace poisoned tool output, block the external sink, and quarantine the agent.</p></article>
+          <article><span class="mono">03</span><h3>Browser Guard</h3><p>Open ChatGPT or Claude, paste a synthetic corporate secret, and watch Driftwatch stop the data before it reaches the AI service.</p></article>
+        </div>
 
         <div class="demo-flow">
           <div class="demo-step">
@@ -417,9 +496,9 @@
           <article><span>01</span><h3>Real Azure OpenAI target</h3><p>Wire the existing real-model seam to a live Azure OpenAI deployment.</p></article>
           <article><span>02</span><h3>Live Prompt Shields</h3><p>Replace the local per-message baseline with the Azure AI Content Safety endpoint.</p></article>
           <article><span>03</span><h3>Shared session state</h3><p>Back stateless inspection instances with a distributed store such as Redis.</p></article>
-          <article><span>04</span><h3>Cross-agent trust</h3><p>Propagate security context across agent-to-agent handoffs.</p></article>
-          <article><span>05</span><h3>Governance labels</h3><p>Derive integrity and confidentiality context from Purview and identity signals.</p></article>
-          <article><span>06</span><h3>Full MCP compliance</h3><p>Expand JSON-RPC / SSE compatibility for broader production interoperability.</p></article>
+          <article><span>04</span><h3>Browser policy expansion</h3><p>Add typed-submit and file-upload inspection, managed destination policy, and centrally governed browser enforcement.</p></article>
+          <article><span>05</span><h3>Cross-agent + governance context</h3><p>Propagate security context across agent handoffs and derive confidentiality signals from Purview and identity.</p></article>
+          <article><span>06</span><h3>Full MCP interoperability</h3><p>Expand JSON-RPC / SSE compatibility for broader production integration.</p></article>
         </div>
       </div>
     </section>
@@ -428,8 +507,8 @@
       <div class="container cta-box">
         <div>
           <div class="section-kicker">Driftwatch</div>
-          <h2>Secure the session, not just the prompt.</h2>
-          <p>A stateful firewall for AI conversations and agents.</p>
+          <h2>Secure the session, the agent, and the data leaving the browser.</h2>
+          <p>Stateful AI security across conversations, tools, and public AI destinations.</p>
         </div>
         <div class="cta-actions">
           <a class="button button-primary" href="https://github.com/rohitanandriso/driftwatch" target="_blank" rel="noreferrer">View on GitHub ↗</a>
