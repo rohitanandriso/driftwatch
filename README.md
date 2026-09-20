@@ -14,6 +14,8 @@ Built for **Microsoft Hackathon — Hack SFI with AI**.
 - Intent drift, secret probing, exfiltration budget, tool-chain, and refusal-probing detectors
 - MCP tool-boundary interception
 - Agent kill switch and quarantine
+- Browser Guard prototype for ChatGPT and Claude paste-time secret protection
+- Multilingual Chat Firewall and MCP demo scenarios (English, French, German, Russian, Hindi, Mandarin)
 - TLS-terminating gateway pattern
 - OpenTelemetry-shaped security telemetry
 - Evaluation harness comparing stateful inspection with a per-message baseline
@@ -57,6 +59,8 @@ Driftwatch is positioned as a complementary security layer that can integrate wi
 - Add cross-agent trust propagation
 - Derive governance context from Purview and identity signals
 - Expand MCP interoperability
+- Add typed-submit and file-upload inspection to Browser Guard
+- Add managed browser destination policy and security telemetry
 
 ## Landing page files
 
