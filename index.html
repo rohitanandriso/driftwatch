@@ -29,11 +29,10 @@
         <a href="#problem">Problem</a>
         <a href="#why">Why Driftwatch</a>
         <a href="#architecture">Architecture</a>
+        <a href="#videos">Demos</a>
+        <a href="#results">Results</a>
         <a href="#detectors">Detectors</a>
         <a href="#browser-guard">Browser Guard</a>
-        <a href="#videos">Videos</a>
-        <a href="#results">Results</a>
-        <a href="#demo">Demo</a>
       </nav>
 
       <div class="nav-actions">
@@ -60,7 +59,7 @@
           </p>
 
           <div class="hero-actions">
-            <a class="button button-primary" href="#demo">Watch the attack flow</a>
+            <a class="button button-primary" href="#videos">Watch working demos</a>
             <a class="button button-ghost" href="#architecture">Explore architecture</a>
             <a class="button button-ghost" href="https://github.com/rohitanandriso/driftwatch" target="_blank" rel="noreferrer">View source ↗</a>
           </div>
@@ -111,14 +110,14 @@
 
     <section class="logos-strip">
       <div class="container strip-content">
-        <span>Designed as a complementary security layer</span>
+        <span>One stateful security model across three AI trust boundaries</span>
         <div class="strip-tags">
-          <span>Azure OpenAI</span>
-          <span>Prompt Shields</span>
-          <span>Microsoft Sentinel</span>
-          <span>Entra Agent ID</span>
-          <span>Microsoft Purview</span>
-          <span>MCP</span>
+          <span>Chat Firewall</span>
+          <span>MCP Gateway</span>
+          <span>Browser Guard</span>
+          <span>Multilingual</span>
+          <span>Kill Switch</span>
+          <span>Insider Risk</span>
         </div>
       </div>
     </section>
@@ -280,112 +279,6 @@
         </p>
       </div>
     </section>
-
-    <section class="section section-dark" id="detectors">
-      <div class="container">
-        <div class="section-kicker">Session-level detectors</div>
-        <h2>Signals that become visible when the firewall remembers.</h2>
-
-        <div class="cards-5">
-          <article class="feature-card">
-            <div class="feature-icon">↝</div>
-            <h3>Intent Drift</h3>
-            <p>Tracks conversation trajectory to surface gradual escalation patterns such as multi-turn jailbreak progression.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon">⌕</div>
-            <h3>Secret Probing</h3>
-            <p>Accumulates repeated requests for credentials, keys, passwords, and sensitive secrets across turns.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon">∑</div>
-            <h3>Exfiltration Budget</h3>
-            <p>Counts cumulative distinct sensitive records released across the session rather than per response.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon">⛓</div>
-            <h3>Tool Chain</h3>
-            <p>Correlates sensitive reads, untrusted content, and external sinks into higher-risk action sequences.</p>
-          </article>
-          <article class="feature-card">
-            <div class="feature-icon">↻</div>
-            <h3>Refusal Probing</h3>
-            <p>Detects persistent refuse → rephrase → retry loops associated with automated multi-turn attacks.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section" id="browser-guard">
-      <div class="container">
-        <div class="section-kicker">Browser Guard · Working prototype</div>
-        <h2>Reduce insider risk before enterprise data reaches personal AI accounts.</h2>
-        <p class="section-intro">
-          Insider risk and inadvertent data exposure can bypass enterprise identity controls when sensitive information is
-          pasted into public AI services through personal accounts or subscriptions. Driftwatch Browser Guard moves enforcement
-          to the managed-browser boundary: it inspects content before submission, correlates it with session context, and can
-          warn or block when protected enterprise data is about to leave.
-        </p>
-
-        <div class="browser-grid">
-          <article class="browser-card accent-card">
-            <span class="browser-status mono">01 · BEFORE SEND</span>
-            <h3>AI data-egress protection</h3>
-            <p>Inspect prompts and pasted content before they reach ChatGPT or Claude, including sessions accessed through personal AI accounts.</p>
-            <div class="browser-flow mono">
-              <span>copy secret</span><b>→</b><span>Driftwatch</span><b>→</b><span class="kill">BLOCK</span>
-            </div>
-          </article>
-          <article class="browser-card">
-            <span class="browser-status mono">02 · LOCAL FIRST</span>
-            <h3>Secret-aware inspection</h3>
-            <p>Detect high-confidence credentials and secret patterns locally, including private keys, tokens, connection strings, passwords, and API keys.</p>
-            <div class="browser-pills">
-              <span>JWT</span><span>API keys</span><span>Passwords</span><span>Connection strings</span><span>Private keys</span>
-            </div>
-          </article>
-          <article class="browser-card">
-            <span class="browser-status mono">03 · ENTERPRISE READY</span>
-            <h3>Policy at the browser boundary</h3>
-            <p>Prototype today: paste interception and local session scoring. Production path: file-upload inspection, typed-submit interception, managed policy, and security telemetry.</p>
-            <div class="browser-pills">
-              <span>Edge / Chrome</span><span>ChatGPT</span><span>Claude</span><span>Sentinel-ready</span>
-            </div>
-          </article>
-        </div>
-
-        <div class="browser-demo-panel">
-          <div>
-            <span class="card-label">Example · personal AI destination</span>
-            <h3>DB_PASSWORD=DemoSecret123!</h3>
-            <p>Driftwatch intercepts the paste in the managed browser, classifies the content as a credential, and blocks it before the text reaches the public AI service.</p>
-          </div>
-          <div class="browser-verdict mono">
-            <span>destination</span><b>chatgpt.com</b>
-            <span>classification</span><b>credential</b>
-            <span>session risk</span><b class="kill">CRITICAL</b>
-            <span>action</span><b class="kill">BLOCK</b>
-          </div>
-        </div>
-
-        <div class="language-panel">
-          <div>
-            <span class="card-label">Multilingual security demonstrations</span>
-            <h3>Security behavior should not depend on English-only prompts.</h3>
-            <p>Chat Firewall and compromised-MCP demo scenarios now include multilingual coverage. Language changes the content; the trust-boundary policy stays the same.</p>
-          </div>
-          <div class="language-chips">
-            <span>English</span><span>Français</span><span>Deutsch</span><span>Русский</span><span>हिन्दी</span><span>中文</span>
-          </div>
-        </div>
-        <p class="architecture-note">
-          Multilingual scenarios are prototype demo validation and are not included in the original 94.4% evaluation benchmark.
-        </p>
-      </div>
-    </section>
-
-
     <section class="section section-dark" id="videos">
       <div class="container">
         <div class="section-kicker">Recorded demos</div>
@@ -437,7 +330,7 @@
             <div class="video-copy">
               <span class="video-index mono">03 · 00:56</span>
               <h3>Browser Guard</h3>
-              <p>See a synthetic enterprise credential intercepted before it reaches a public AI service through a personal account.</p>
+              <p>See a synthetic enterprise credential intercepted before it reaches a public AI service outside the enterprise identity boundary.</p>
             </div>
           </article>
         </div>
@@ -445,7 +338,6 @@
         <div class="video-note mono">CHAT FIREWALL · MCP GATEWAY · BROWSER GUARD → ONE STATEFUL SECURITY MODEL</div>
       </div>
     </section>
-
     <section class="section" id="results">
       <div class="container">
         <div class="section-kicker">Evaluation</div>
@@ -482,66 +374,113 @@
         </div>
       </div>
     </section>
-
-    <section class="section section-dark" id="demo">
+    <section class="section section-dark" id="detectors">
       <div class="container">
-        <div class="section-kicker">Live demonstration</div>
-        <h2>Three security surfaces. One stateful engine.</h2>
-        <p class="section-intro">The demo moves from conversation-level drift, to compromised MCP tools, to browser data-egress protection — all using the same security principle: remember context and enforce at the trust boundary.</p>
+        <div class="section-kicker">Session-level detectors</div>
+        <h2>Signals that become visible when the firewall remembers.</h2>
 
-        <div class="demo-surfaces">
-          <article><span class="mono">01</span><h3>Chat Firewall</h3><p>Run benign-to-malicious multi-turn conversations and watch session signals move from ALLOW to FLAG, BLOCK, and TERMINATE.</p></article>
-          <article><span class="mono">02</span><h3>MCP Tool Boundary</h3><p>Use a compromised MCP server, trace poisoned tool output, block the external sink, and quarantine the agent.</p></article>
-          <article><span class="mono">03</span><h3>Browser Guard</h3><p>Open ChatGPT or Claude, paste a synthetic corporate secret, and watch Driftwatch stop the data before it reaches the AI service.</p></article>
-        </div>
-
-        <div class="demo-flow">
-          <div class="demo-step">
-            <span class="demo-index mono">01</span>
-            <div class="demo-dot allow-bg"></div>
-            <h3>Benign opening</h3>
-            <p>The first request passes normal per-turn checks.</p>
-          </div>
-          <div class="demo-line"></div>
-          <div class="demo-step">
-            <span class="demo-index mono">02</span>
-            <div class="demo-dot allow-bg"></div>
-            <h3>Gradual escalation</h3>
-            <p>Small steps stay individually plausible while the session moves toward risky intent.</p>
-          </div>
-          <div class="demo-line"></div>
-          <div class="demo-step">
-            <span class="demo-index mono">03</span>
-            <div class="demo-dot flag-bg"></div>
-            <h3>Signals correlate</h3>
-            <p>Intent drift combines with probing, exfiltration, refusal, or tool-chain evidence.</p>
-          </div>
-          <div class="demo-line"></div>
-          <div class="demo-step">
-            <span class="demo-index mono">04</span>
-            <div class="demo-dot block-bg"></div>
-            <h3>Block / terminate</h3>
-            <p>The current action is stopped when the enforced verdict crosses policy.</p>
-          </div>
-          <div class="demo-line"></div>
-          <div class="demo-step">
-            <span class="demo-index mono">05</span>
-            <div class="demo-dot kill-bg"></div>
-            <h3>Quarantine</h3>
-            <p>The agent identity is refused at subsequent model and tool boundaries until release.</p>
-          </div>
-        </div>
-
-        <div class="demo-callout">
-          <div>
-            <span class="card-label">Compromised MCP scenario</span>
-            <h3>The tool server can be compromised. The boundary still has a vote.</h3>
-            <p>Driftwatch can tag poisoned tool output as untrusted, detect a risky path toward an external sink, block the action, and quarantine the agent.</p>
-          </div>
-          <a class="button button-primary" href="https://github.com/rohitanandriso/driftwatch" target="_blank" rel="noreferrer">Open project source ↗</a>
+        <div class="cards-5">
+          <article class="feature-card">
+            <div class="feature-icon">↝</div>
+            <h3>Intent Drift</h3>
+            <p>Tracks conversation trajectory to surface gradual escalation patterns such as multi-turn jailbreak progression.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">⌕</div>
+            <h3>Secret Probing</h3>
+            <p>Accumulates repeated requests for credentials, keys, passwords, and sensitive secrets across turns.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">∑</div>
+            <h3>Exfiltration Budget</h3>
+            <p>Counts cumulative distinct sensitive records released across the session rather than per response.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">⛓</div>
+            <h3>Tool Chain</h3>
+            <p>Correlates sensitive reads, untrusted content, and external sinks into higher-risk action sequences.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">↻</div>
+            <h3>Refusal Probing</h3>
+            <p>Detects persistent refuse → rephrase → retry loops associated with automated multi-turn attacks.</p>
+          </article>
         </div>
       </div>
     </section>
+    <section class="section" id="browser-guard">
+      <div class="container">
+        <div class="section-kicker">Browser Guard · Working prototype</div>
+        <h2>Reduce insider risk before enterprise data reaches public AI.</h2>
+        <p class="section-intro">
+          Insider risk and inadvertent data exposure can bypass enterprise identity controls when sensitive information is
+          sent to public AI destinations outside approved enterprise channels. Driftwatch Browser Guard moves enforcement
+          to the managed-browser boundary: it inspects content before submission, correlates it with session context, and can
+          warn or block when protected enterprise data is about to leave.
+        </p>
+
+        <div class="browser-grid">
+          <article class="browser-card accent-card">
+            <span class="browser-status mono">01 · BEFORE SEND</span>
+            <h3>AI data-egress protection</h3>
+            <p>Inspect prompts and pasted content before they reach ChatGPT or Claude, including sessions outside the enterprise identity boundary.</p>
+            <div class="browser-flow mono">
+              <span>copy secret</span><b>→</b><span>Driftwatch</span><b>→</b><span class="kill">BLOCK</span>
+            </div>
+          </article>
+          <article class="browser-card">
+            <span class="browser-status mono">02 · LOCAL FIRST</span>
+            <h3>Secret-aware inspection</h3>
+            <p>Detect high-confidence credentials and secret patterns locally, including private keys, tokens, connection strings, passwords, and API keys.</p>
+            <div class="browser-pills">
+              <span>JWT</span><span>API keys</span><span>Passwords</span><span>Connection strings</span><span>Private keys</span>
+            </div>
+          </article>
+          <article class="browser-card">
+            <span class="browser-status mono">03 · ENTERPRISE READY</span>
+            <h3>Policy at the browser boundary</h3>
+            <p>Prototype today: paste interception and local session scoring. Production path: file-upload inspection, typed-submit interception, managed policy, and security telemetry.</p>
+            <div class="browser-pills">
+              <span>Edge / Chrome</span><span>ChatGPT</span><span>Claude</span><span>Sentinel-ready</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="browser-demo-panel">
+          <div>
+            <span class="card-label">Example · public AI destination</span>
+            <h3>DB_PASSWORD=DemoSecret123!</h3>
+            <p>Driftwatch intercepts the paste in the managed browser, classifies the content as a credential, and blocks it before the text reaches the public AI service.</p>
+          </div>
+          <div class="browser-verdict mono">
+            <span>destination</span><b>chatgpt.com</b>
+            <span>classification</span><b>credential</b>
+            <span>session risk</span><b class="kill">CRITICAL</b>
+            <span>action</span><b class="kill">BLOCK</b>
+          </div>
+        </div>
+
+        <div class="language-panel">
+          <div>
+            <span class="card-label">Multilingual security demonstrations</span>
+            <h3>Security behavior should not depend on English-only prompts.</h3>
+            <p>Chat Firewall and compromised-MCP demo scenarios now include multilingual coverage. Language changes the content; the trust-boundary policy stays the same.</p>
+          </div>
+          <div class="language-chips">
+            <span>English</span><span>Français</span><span>Deutsch</span><span>Русский</span><span>हिन्दी</span><span>中文</span>
+          </div>
+        </div>
+        <p class="architecture-note">
+          Multilingual scenarios are prototype demo validation and are not included in the original 94.4% evaluation benchmark.
+        </p>
+      </div>
+    </section>
+
+
+
+
+
+
 
     <section class="section section-dark" id="roadmap">
       <div class="container">
