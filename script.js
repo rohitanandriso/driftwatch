@@ -1,6 +1,6 @@
 const revealTargets = [
   ...document.querySelectorAll(
-    ".compare-card, .why-card, .feature-card, .metric, .roadmap-grid article, .arch-node, .support-card, .demo-step, .integration-grid article, .result-panel, .demo-callout"
+    ".compare-card, .why-card, .feature-card, .metric, .roadmap-grid article, .arch-node, .support-card, .demo-step, .result-panel, .demo-callout, .surface-lane, .video-card, .browser-card, .browser-demo-panel, .language-panel"
   )
 ];
 
@@ -48,3 +48,13 @@ function animateSession() {
 rows.forEach((row) => row.classList.remove("active"));
 animateSession();
 setInterval(animateSession, 1400);
+
+
+document.querySelectorAll(".demo-video").forEach((video) => {
+  const frame = video.closest(".video-frame");
+  video.addEventListener("error", () => frame?.classList.add("media-error"));
+  const source = video.querySelector("source");
+  if (source) {
+    source.addEventListener("error", () => frame?.classList.add("media-error"));
+  }
+});
