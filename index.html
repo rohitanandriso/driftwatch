@@ -31,6 +31,7 @@
         <a href="#architecture">Architecture</a>
         <a href="#detectors">Detectors</a>
         <a href="#browser-guard">Browser Guard</a>
+        <a href="#videos">Videos</a>
         <a href="#results">Results</a>
         <a href="#demo">Demo</a>
       </nav>
@@ -131,7 +132,7 @@
         <div class="body-copy">
           <p>
             A strong per-message control can catch obvious single-turn attacks. But gradual jailbreaks,
-            incremental data leakage, repeated secret probing, and risky tool sequences can remain
+            incremental data leakage, repeated secret probing, risky tool sequences, and insider-risk data egress to public AI can remain
             individually acceptable while becoming dangerous in aggregate.
           </p>
           <p>
@@ -197,78 +198,85 @@
       </div>
     </section>
 
+
     <section class="section" id="architecture">
       <div class="container">
         <div class="section-kicker">Architecture</div>
-        <h2>A stateful control plane at the AI trust boundary.</h2>
+        <h2>One stateful control plane. Three enforcement points.</h2>
         <p class="section-intro">
-          The same inspection engine can sit in front of model traffic, at the MCP tool boundary,
-          or behind a managed-browser extension that inspects AI data egress before submission.
-          Every event updates session state; detectors re-evaluate; the highest correlated verdict is enforced.
+          Driftwatch follows the trust boundary rather than a single product surface. The same session-aware
+          detection and policy model can protect conversational traffic, agent tool activity, and sensitive data
+          leaving a managed browser for public AI services.
         </p>
 
-        <div class="architecture-stage">
-          <div class="arch-flow">
-            <div class="arch-node">
-              <span class="node-num">01</span>
-              <strong>User / App</strong>
-              <small>Conversation request</small>
-            </div>
-            <div class="arch-arrow">→</div>
-            <div class="arch-node featured">
-              <span class="node-num">02</span>
-              <strong>Driftwatch</strong>
-              <small>Session state · detectors · policy</small>
-            </div>
-            <div class="arch-arrow">→</div>
-            <div class="arch-node">
-              <span class="node-num">03</span>
-              <strong>Agent / Model</strong>
-              <small>Model request / response</small>
-            </div>
-            <div class="arch-arrow">→</div>
-            <div class="arch-node featured">
-              <span class="node-num">04</span>
-              <strong>MCP Gateway</strong>
-              <small>Inspect tool call + result</small>
-            </div>
-            <div class="arch-arrow">→</div>
-            <div class="arch-node">
-              <span class="node-num">05</span>
-              <strong>MCP Tools</strong>
-              <small>Data sources + side effects</small>
+        <div class="trust-architecture">
+          <div class="control-core">
+            <div class="core-pulse"></div>
+            <span class="support-label mono">SHARED SECURITY BRAIN</span>
+            <h3>Driftwatch Stateful Control Plane</h3>
+            <p>Session state · multilingual detectors · risk correlation · verdict policy · kill switch · telemetry</p>
+            <div class="core-verdicts mono">
+              <span class="allow-v">ALLOW</span>
+              <span class="flag-v">FLAG</span>
+              <span class="redact-v">REDACT</span>
+              <span class="block-v">BLOCK</span>
+              <span class="kill-v">TERMINATE</span>
             </div>
           </div>
 
-          <div class="arch-support">
-            <div class="support-card">
-              <span class="support-label mono">IDENTITY</span>
-              <strong>Entra Agent ID</strong>
-              <small>State and quarantine keyed to agent identity</small>
-            </div>
-            <div class="support-card">
-              <span class="support-label mono">DATA CONTEXT</span>
-              <strong>Microsoft Purview</strong>
-              <small>Sensitive information context for production integration</small>
-            </div>
-            <div class="support-card">
-              <span class="support-label mono">TELEMETRY</span>
-              <strong>Microsoft Sentinel</strong>
-              <small>OpenTelemetry-shaped verdict and session signals</small>
-            </div>
+          <div class="surface-lanes">
+            <article class="surface-lane">
+              <div class="surface-head">
+                <span class="surface-num mono">01</span>
+                <div><span class="surface-type mono">CHAT FIREWALL</span><h3>Conversation boundary</h3></div>
+              </div>
+              <div class="lane-flow mono">
+                <span class="lane-node">User / App</span><b>→</b>
+                <span class="lane-node featured">Driftwatch</span><b>→</b>
+                <span class="lane-node">Model / Agent</span>
+              </div>
+              <p>Every turn updates session state so gradual intent drift, probing, refusal loops, and cumulative exfiltration can be correlated across the conversation.</p>
+              <div class="lane-result mono"><span>SESSION MEMORY</span><b>ALLOW → FLAG → BLOCK → TERMINATE</b></div>
+            </article>
+
+            <article class="surface-lane">
+              <div class="surface-head">
+                <span class="surface-num mono">02</span>
+                <div><span class="surface-type mono">MCP GATEWAY</span><h3>Agent tool boundary</h3></div>
+              </div>
+              <div class="lane-flow mono">
+                <span class="lane-node">AI Agent</span><b>→</b>
+                <span class="lane-node featured">Driftwatch</span><b>→</b>
+                <span class="lane-node">MCP Tools</span>
+              </div>
+              <p>Driftwatch inspects tool calls and results, tracks untrusted content and sensitive reads, blocks dangerous external sinks, and can quarantine a compromised agent.</p>
+              <div class="lane-result mono"><span>TOOL CORRELATION</span><b>BLOCK SINK → QUARANTINE AGENT</b></div>
+            </article>
+
+            <article class="surface-lane">
+              <div class="surface-head">
+                <span class="surface-num mono">03</span>
+                <div><span class="surface-type mono">BROWSER GUARD</span><h3>Insider-risk data-egress boundary</h3></div>
+              </div>
+              <div class="lane-flow mono">
+                <span class="lane-node">Managed Browser</span><b>→</b>
+                <span class="lane-node featured">Driftwatch</span><b>→</b>
+                <span class="lane-node">Public AI</span>
+              </div>
+              <p>Before sensitive content reaches ChatGPT, Claude, or another public AI destination, Browser Guard can inspect the egress locally and enforce policy even when access uses a personal account.</p>
+              <div class="lane-result mono"><span>BEFORE SEND</span><b>DETECT SECRET → WARN / BLOCK</b></div>
+            </article>
+          </div>
+
+          <div class="architecture-backplane">
+            <div><span class="support-label mono">IDENTITY</span><strong>Entra / managed endpoint context</strong></div>
+            <div><span class="support-label mono">DATA CONTEXT</span><strong>Purview-aligned classification path</strong></div>
+            <div><span class="support-label mono">SOC TELEMETRY</span><strong>Sentinel-ready security events</strong></div>
           </div>
         </div>
 
-        <div class="verdicts mono">
-          <span class="v allow-v">ALLOW</span><span>→</span>
-          <span class="v flag-v">FLAG</span><span>→</span>
-          <span class="v redact-v">REDACT</span><span>→</span>
-          <span class="v block-v">BLOCK</span><span>→</span>
-          <span class="v kill-v">TERMINATE</span>
-        </div>
         <p class="architecture-note">
-          Intent drift is inferential, so Driftwatch can require corroboration before enforcement:
-          one weak signal logs; agreeing signals can act.
+          Enforcement differs by surface: owned agents can be terminated and quarantined; hosted public AI is protected at the managed-browser egress point.
         </p>
       </div>
     </section>
@@ -312,18 +320,19 @@
     <section class="section" id="browser-guard">
       <div class="container">
         <div class="section-kicker">Browser Guard · Working prototype</div>
-        <h2>Stop enterprise secrets before they reach personal AI accounts.</h2>
+        <h2>Reduce insider risk before enterprise data reaches personal AI accounts.</h2>
         <p class="section-intro">
-          Employees can sign in to public AI tools with personal accounts and subscriptions, outside the enterprise identity boundary.
-          Driftwatch Browser Guard moves enforcement to the managed browser: it inspects pasted content before submission,
-          correlates it with session context, and can warn or block when sensitive enterprise data is about to leave.
+          Insider risk and inadvertent data exposure can bypass enterprise identity controls when sensitive information is
+          pasted into public AI services through personal accounts or subscriptions. Driftwatch Browser Guard moves enforcement
+          to the managed-browser boundary: it inspects content before submission, correlates it with session context, and can
+          warn or block when protected enterprise data is about to leave.
         </p>
 
         <div class="browser-grid">
           <article class="browser-card accent-card">
             <span class="browser-status mono">01 · BEFORE SEND</span>
             <h3>AI data-egress protection</h3>
-            <p>Inspect prompts and pasted content before they reach ChatGPT or Claude, even when the user is signed in with a personal account.</p>
+            <p>Inspect prompts and pasted content before they reach ChatGPT or Claude, including sessions accessed through personal AI accounts.</p>
             <div class="browser-flow mono">
               <span>copy secret</span><b>→</b><span>Driftwatch</span><b>→</b><span class="kill">BLOCK</span>
             </div>
@@ -373,6 +382,67 @@
         <p class="architecture-note">
           Multilingual scenarios are prototype demo validation and are not included in the original 94.4% evaluation benchmark.
         </p>
+      </div>
+    </section>
+
+
+    <section class="section section-dark" id="videos">
+      <div class="container">
+        <div class="section-kicker">Recorded demos</div>
+        <h2>See Driftwatch operating at all three trust boundaries.</h2>
+        <p class="section-intro">
+          Three short recordings show the working prototypes independently: stateful conversation inspection,
+          compromised-MCP containment, and browser-based insider-risk protection.
+        </p>
+
+        <div class="video-grid">
+          <article class="video-card">
+            <div class="video-frame">
+              <video class="demo-video" controls playsinline preload="metadata">
+                <source src="videos/ChatFIrewall.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+              <div class="video-missing">Demo video is being published.</div>
+            </div>
+            <div class="video-copy">
+              <span class="video-index mono">01 · 00:48</span>
+              <h3>Chat Firewall</h3>
+              <p>Watch a conversation accumulate risk across turns and move from observation to enforcement using session-level signals.</p>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-frame">
+              <video class="demo-video" controls playsinline preload="metadata">
+                <source src="videos/MCP.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+              <div class="video-missing">Demo video is being published.</div>
+            </div>
+            <div class="video-copy">
+              <span class="video-index mono">02 · 00:40</span>
+              <h3>MCP Tool Boundary</h3>
+              <p>See Driftwatch inspect a compromised tool path, block the external sink, and contain the agent at the tool boundary.</p>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-frame">
+              <video class="demo-video" controls playsinline preload="metadata">
+                <source src="videos/BrowserGuard.mp4" type="video/mp4">
+                Your browser does not support HTML5 video.
+              </video>
+              <div class="video-missing">Demo video is being published.</div>
+            </div>
+            <div class="video-copy">
+              <span class="video-index mono">03 · 00:56</span>
+              <h3>Browser Guard</h3>
+              <p>See a synthetic enterprise credential intercepted before it reaches a public AI service through a personal account.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="video-note mono">CHAT FIREWALL · MCP GATEWAY · BROWSER GUARD → ONE STATEFUL SECURITY MODEL</div>
       </div>
     </section>
 
@@ -473,21 +543,6 @@
       </div>
     </section>
 
-    <section class="section" id="integrations">
-      <div class="container">
-        <div class="section-kicker">Microsoft-native security story</div>
-        <h2>Complement the controls already in the platform.</h2>
-        <div class="integration-grid">
-          <article><span>PS</span><div><h3>Prompt Shields</h3><p>Per-input attack detection layer that can sit alongside session-level correlation.</p></div></article>
-          <article><span>PU</span><div><h3>Microsoft Purview</h3><p>Source of sensitive-data context for production exfiltration controls.</p></div></article>
-          <article><span>ID</span><div><h3>Entra Agent ID</h3><p>Durable non-human identity for state, attribution, and quarantine.</p></div></article>
-          <article><span>SI</span><div><h3>Microsoft Sentinel</h3><p>Central destination for Driftwatch verdicts and session telemetry.</p></div></article>
-          <article><span>AO</span><div><h3>Azure OpenAI</h3><p>Production model target through the documented real-agent integration seam.</p></div></article>
-          <article><span>MP</span><div><h3>MCP</h3><p>Tool boundary where data movement and side effects can be inspected.</p></div></article>
-        </div>
-      </div>
-    </section>
-
     <section class="section section-dark" id="roadmap">
       <div class="container">
         <div class="section-kicker">Production path</div>
@@ -507,7 +562,7 @@
       <div class="container cta-box">
         <div>
           <div class="section-kicker">Driftwatch</div>
-          <h2>Secure the session, the agent, and the data leaving the browser.</h2>
+          <h2>Protect the conversation, the agent, and the data leaving the browser.</h2>
           <p>Stateful AI security across conversations, tools, and public AI destinations.</p>
         </div>
         <div class="cta-actions">
