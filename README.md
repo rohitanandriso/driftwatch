@@ -28,6 +28,14 @@ Built for **Microsoft Hackathon — Hack SFI with AI**.
 
 **https://github.com/rohitanandriso/driftwatch**
 
+## Technical architecture deck
+
+The landing page includes a dedicated technical-deck section. The downloadable PowerPoint is expected at:
+
+`docs/Driftwatch_Technical_Architecture_Deck.pptx`
+
+It covers the shared stateful control plane, session model, detectors, Chat Firewall, MCP Gateway, Browser Guard, multilingual demonstrations, containment model, deployment architecture, validation scope, and production roadmap.
+
 ## Current evaluation results
 
 These results come from the current Driftwatch evaluation corpus and harness and should be treated as prototype results, not independent production benchmarks.
