@@ -698,3 +698,14 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 12px
   .overview-video-card { border-radius: 14px; }
   .overview-points { grid-template-columns: 1fr; }
 }
+
+
+.footer-access {
+  color: var(--cyan);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.footer-access:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
