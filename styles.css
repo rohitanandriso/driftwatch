@@ -71,7 +71,8 @@ strong { color: var(--text); }
   color: #04111b; font-size: 13px; letter-spacing: -.5px;
   box-shadow: 0 0 30px rgba(77,232,255,.14);
 }
-.nav { display: flex; gap: 24px; color: var(--muted); font-size: 14px; }
+.nav { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.nav a { white-space: nowrap; }
 .nav a:hover { color: var(--text); }
 .nav-actions { display: flex; gap: 8px; }
 
