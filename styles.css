@@ -650,3 +650,50 @@ footer { border-top: 1px solid var(--line); color: var(--muted); font-size: 12px
   .lane-flow { grid-template-columns: 1fr; }
   .lane-flow b { transform: rotate(90deg); justify-self:center; }
 }
+
+
+/* Hackathon overview video */
+.overview-video-card {
+  max-width: 1080px;
+  margin: 36px auto 0;
+  border: 1px solid rgba(77,232,255,.24);
+  border-radius: 22px;
+  overflow: hidden;
+  background: #050b11;
+  box-shadow: 0 30px 90px rgba(0,0,0,.36), 0 0 50px rgba(77,232,255,.035);
+}
+.overview-video-frame {
+  aspect-ratio: 16 / 9;
+  border-bottom: 0;
+}
+.overview-video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.overview-points {
+  max-width: 1080px;
+  margin: 16px auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.overview-points span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 15px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: rgba(255,255,255,.018);
+  color: #c9d8e6;
+  font-size: 12px;
+}
+.overview-points b {
+  color: var(--cyan);
+  font: 600 10px "JetBrains Mono";
+}
+@media (max-width: 700px) {
+  .overview-video-card { border-radius: 14px; }
+  .overview-points { grid-template-columns: 1fr; }
+}
