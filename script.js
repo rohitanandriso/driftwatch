@@ -99,15 +99,6 @@ document.querySelectorAll(".demo-video").forEach((video) => {
     </div>`;
   results.parentNode.insertBefore(section, results);
 
-  const nav = document.querySelector(".nav");
-  if (nav && !nav.querySelector('a[href="#technical-deck"]')) {
-    const link = document.createElement("a");
-    link.href = "#technical-deck";
-    link.textContent = "Technical Deck";
-    const resultsLink = nav.querySelector('a[href="#results"]');
-    nav.insertBefore(link, resultsLink || null);
-  }
-
   const heroActions = document.querySelector(".hero-actions");
   if (heroActions && !heroActions.querySelector('a[href="#technical-deck"]')) {
     const link = document.createElement("a");
